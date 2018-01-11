@@ -1,0 +1,387 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="P104HotelModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Photos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="image_name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="image_src" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Room_Details">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="detail_name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Room_Types">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="room_type_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rooms">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="room_number" Type="int" Nullable="false" />
+          <Property Name="room_type_id" Type="int" Nullable="false" />
+          <Property Name="bed_count" Type="int" Nullable="false" />
+          <Property Name="room_price" Type="int" Nullable="false" />
+          <Property Name="room_reservation_status" Type="bit" Nullable="false" />
+          <Property Name="room_cleaning_status" Type="bit" Nullable="false" />
+          <Property Name="room_status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rooms_Details">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="room_id" Type="int" />
+          <Property Name="detail_id" Type="int" />
+        </EntityType>
+        <EntityType Name="Rooms_Photos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="room_id" Type="int" />
+          <Property Name="photo_id" Type="int" />
+        </EntityType>
+        <Association Name="room_to_type">
+          <End Role="Room_Types" Type="Self.Room_Types" Multiplicity="1" />
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room_Types">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Rooms">
+              <PropertyRef Name="room_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="to_detail">
+          <End Role="Room_Details" Type="Self.Room_Details" Multiplicity="0..1" />
+          <End Role="Rooms_Details" Type="Self.Rooms_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room_Details">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Rooms_Details">
+              <PropertyRef Name="detail_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="to_photo">
+          <End Role="Photos" Type="Self.Photos" Multiplicity="0..1" />
+          <End Role="Rooms_Photos" Type="Self.Rooms_Photos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Photos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Rooms_Photos">
+              <PropertyRef Name="photo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="to_room">
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="0..1" />
+          <End Role="Rooms_Details" Type="Self.Rooms_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Rooms_Details">
+              <PropertyRef Name="room_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="to_room_01">
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="0..1" />
+          <End Role="Rooms_Photos" Type="Self.Rooms_Photos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Rooms_Photos">
+              <PropertyRef Name="room_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="P104HotelModelStoreContainer">
+          <EntitySet Name="Photos" EntityType="Self.Photos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Room_Details" EntityType="Self.Room_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Room_Types" EntityType="Self.Room_Types" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rooms_Details" EntityType="Self.Rooms_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rooms_Photos" EntityType="Self.Rooms_Photos" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="room_to_type" Association="Self.room_to_type">
+            <End Role="Room_Types" EntitySet="Room_Types" />
+            <End Role="Rooms" EntitySet="Rooms" />
+          </AssociationSet>
+          <AssociationSet Name="to_detail" Association="Self.to_detail">
+            <End Role="Room_Details" EntitySet="Room_Details" />
+            <End Role="Rooms_Details" EntitySet="Rooms_Details" />
+          </AssociationSet>
+          <AssociationSet Name="to_photo" Association="Self.to_photo">
+            <End Role="Photos" EntitySet="Photos" />
+            <End Role="Rooms_Photos" EntitySet="Rooms_Photos" />
+          </AssociationSet>
+          <AssociationSet Name="to_room" Association="Self.to_room">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="Rooms_Details" EntitySet="Rooms_Details" />
+          </AssociationSet>
+          <AssociationSet Name="to_room_01" Association="Self.to_room_01">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="Rooms_Photos" EntitySet="Rooms_Photos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="P104HotelModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Photos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="image_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="image_src" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Rooms_Photos" Relationship="Self.to_photo" FromRole="Photos" ToRole="Rooms_Photos" />
+        </EntityType>
+        <EntityType Name="Room_Details">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="detail_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Rooms_Details" Relationship="Self.to_detail" FromRole="Room_Details" ToRole="Rooms_Details" />
+        </EntityType>
+        <EntityType Name="Room_Types">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="room_type_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Rooms" Relationship="Self.room_to_type" FromRole="Room_Types" ToRole="Rooms" />
+        </EntityType>
+        <EntityType Name="Rooms">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="room_number" Type="Int32" Nullable="false" />
+          <Property Name="room_type_id" Type="Int32" Nullable="false" />
+          <Property Name="bed_count" Type="Int32" Nullable="false" />
+          <Property Name="room_price" Type="Int32" Nullable="false" />
+          <Property Name="room_reservation_status" Type="Boolean" Nullable="false" />
+          <Property Name="room_cleaning_status" Type="Boolean" Nullable="false" />
+          <Property Name="room_status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Room_Types" Relationship="Self.room_to_type" FromRole="Rooms" ToRole="Room_Types" />
+          <NavigationProperty Name="Rooms_Details" Relationship="Self.to_room" FromRole="Rooms" ToRole="Rooms_Details" />
+          <NavigationProperty Name="Rooms_Photos" Relationship="Self.to_room_01" FromRole="Rooms" ToRole="Rooms_Photos" />
+        </EntityType>
+        <EntityType Name="Rooms_Details">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="room_id" Type="Int32" />
+          <Property Name="detail_id" Type="Int32" />
+          <NavigationProperty Name="Room_Details" Relationship="Self.to_detail" FromRole="Rooms_Details" ToRole="Room_Details" />
+          <NavigationProperty Name="Rooms" Relationship="Self.to_room" FromRole="Rooms_Details" ToRole="Rooms" />
+        </EntityType>
+        <EntityType Name="Rooms_Photos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="room_id" Type="Int32" />
+          <Property Name="photo_id" Type="Int32" />
+          <NavigationProperty Name="Photos" Relationship="Self.to_photo" FromRole="Rooms_Photos" ToRole="Photos" />
+          <NavigationProperty Name="Rooms" Relationship="Self.to_room_01" FromRole="Rooms_Photos" ToRole="Rooms" />
+        </EntityType>
+        <Association Name="to_photo">
+          <End Role="Photos" Type="Self.Photos" Multiplicity="0..1" />
+          <End Role="Rooms_Photos" Type="Self.Rooms_Photos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Photos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Rooms_Photos">
+              <PropertyRef Name="photo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="to_detail">
+          <End Role="Room_Details" Type="Self.Room_Details" Multiplicity="0..1" />
+          <End Role="Rooms_Details" Type="Self.Rooms_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room_Details">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Rooms_Details">
+              <PropertyRef Name="detail_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="room_to_type">
+          <End Role="Room_Types" Type="Self.Room_Types" Multiplicity="1" />
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room_Types">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Rooms">
+              <PropertyRef Name="room_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="to_room">
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="0..1" />
+          <End Role="Rooms_Details" Type="Self.Rooms_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Rooms_Details">
+              <PropertyRef Name="room_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="to_room_01">
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="0..1" />
+          <End Role="Rooms_Photos" Type="Self.Rooms_Photos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Rooms_Photos">
+              <PropertyRef Name="room_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HotelDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Photos" EntityType="Self.Photos" />
+          <EntitySet Name="Room_Details" EntityType="Self.Room_Details" />
+          <EntitySet Name="Room_Types" EntityType="Self.Room_Types" />
+          <EntitySet Name="Rooms" EntityType="Self.Rooms" />
+          <EntitySet Name="Rooms_Details" EntityType="Self.Rooms_Details" />
+          <EntitySet Name="Rooms_Photos" EntityType="Self.Rooms_Photos" />
+          <AssociationSet Name="to_photo" Association="Self.to_photo">
+            <End Role="Photos" EntitySet="Photos" />
+            <End Role="Rooms_Photos" EntitySet="Rooms_Photos" />
+          </AssociationSet>
+          <AssociationSet Name="to_detail" Association="Self.to_detail">
+            <End Role="Room_Details" EntitySet="Room_Details" />
+            <End Role="Rooms_Details" EntitySet="Rooms_Details" />
+          </AssociationSet>
+          <AssociationSet Name="room_to_type" Association="Self.room_to_type">
+            <End Role="Room_Types" EntitySet="Room_Types" />
+            <End Role="Rooms" EntitySet="Rooms" />
+          </AssociationSet>
+          <AssociationSet Name="to_room" Association="Self.to_room">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="Rooms_Details" EntitySet="Rooms_Details" />
+          </AssociationSet>
+          <AssociationSet Name="to_room_01" Association="Self.to_room_01">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="Rooms_Photos" EntitySet="Rooms_Photos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="P104HotelModelStoreContainer" CdmEntityContainer="HotelDatabaseEntities">
+          <EntitySetMapping Name="Photos">
+            <EntityTypeMapping TypeName="P104HotelModel.Photos">
+              <MappingFragment StoreEntitySet="Photos">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="image_name" ColumnName="image_name" />
+                <ScalarProperty Name="image_src" ColumnName="image_src" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Room_Details">
+            <EntityTypeMapping TypeName="P104HotelModel.Room_Details">
+              <MappingFragment StoreEntitySet="Room_Details">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="detail_name" ColumnName="detail_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Room_Types">
+            <EntityTypeMapping TypeName="P104HotelModel.Room_Types">
+              <MappingFragment StoreEntitySet="Room_Types">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="room_type_name" ColumnName="room_type_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rooms">
+            <EntityTypeMapping TypeName="P104HotelModel.Rooms">
+              <MappingFragment StoreEntitySet="Rooms">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="room_number" ColumnName="room_number" />
+                <ScalarProperty Name="room_type_id" ColumnName="room_type_id" />
+                <ScalarProperty Name="bed_count" ColumnName="bed_count" />
+                <ScalarProperty Name="room_price" ColumnName="room_price" />
+                <ScalarProperty Name="room_reservation_status" ColumnName="room_reservation_status" />
+                <ScalarProperty Name="room_cleaning_status" ColumnName="room_cleaning_status" />
+                <ScalarProperty Name="room_status" ColumnName="room_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rooms_Details">
+            <EntityTypeMapping TypeName="P104HotelModel.Rooms_Details">
+              <MappingFragment StoreEntitySet="Rooms_Details">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="room_id" ColumnName="room_id" />
+                <ScalarProperty Name="detail_id" ColumnName="detail_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rooms_Photos">
+            <EntityTypeMapping TypeName="P104HotelModel.Rooms_Photos">
+              <MappingFragment StoreEntitySet="Rooms_Photos">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="room_id" ColumnName="room_id" />
+                <ScalarProperty Name="photo_id" ColumnName="photo_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
